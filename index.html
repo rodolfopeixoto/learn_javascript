@@ -168,6 +168,41 @@
 
     }
   };
+
+  function getLenders(amount, apr, years, zipcode ){
+    if(!window.XMLHttpRequest) return;
+
+    var ad = document.getElementById("lenders");
+    if(!ad) return;
+
+    var url = "getLenders.php" +
+              "?amt=" + encodeURIComponent(amount) +
+              "&apr=" + encodeURIComponent(apr)    +
+              "&yrs"  + encodeURIComponent(years)  +
+              "&zip"  + encodeURIComponent(zipcode);
+
+    var req = new XMLHttpRequest();
+    req.open("GET", url);
+    req.send(null);
+
+    req.onreadystatechange = function(){
+      if(req.readyState == 4 && req.status = 200){
+        var response  = req.responseText; //resposta HTTP como string
+        var lenders   = JSON.parse(response); //Analisa em um array JS
+
+        //Converte o array de objetos lender em um string
+        var list = "";
+
+        for(var i = 0; i < lenders.length; i++){
+          list += "<li><a href='" + lenders[i].url  + "'>" +
+          lenders[i].name + "</a>";
+        }
+
+       ad.innerHTML = "<ul>" + list + "</ul>";
+
+      }
+    }
+  }
 </script>
 
 </body>
